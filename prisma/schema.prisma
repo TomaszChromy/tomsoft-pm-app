@@ -1,0 +1,702 @@
+// TomSoft PM App - Database Schema
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// User Management
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  username  String   @unique
+  firstName String
+  lastName  String
+  avatar    String?
+  role      UserRole @default(DEVELOPER)
+  isActive  Boolean  @default(true)
+  
+  // Authentication
+  password     String
+  emailVerified DateTime?
+  resetToken   String?
+  resetExpires DateTime?
+
+  // Two-Factor Authentication
+  twoFactorEnabled Boolean @default(false)
+  twoFactorSecret  String?
+  backupCodes      String? // JSON array of backup codes
+
+  // Role-based permissions
+  permissions      String? // JSON array of permissions
+  
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  lastLogin DateTime?
+  
+  // Relations
+  ownedProjects        Project[]             @relation("ProjectOwner")
+  assignedProjects     ProjectMember[]
+  assignedTasks        Task[]
+  comments             Comment[]
+  notifications        Notification[]
+  timeEntries          TimeEntry[]
+  reports              Report[]
+  notificationSettings NotificationSettings?
+  notificationRules    NotificationRule[]
+  integrations         Integration[]
+
+  // Performance indexes
+  @@index([email])
+  @@index([role])
+  @@index([isActive])
+  @@index([createdAt])
+  @@map("users")
+}
+
+enum UserRole {
+  ADMIN
+  PROJECT_MANAGER
+  DEVELOPER
+  CLIENT
+  VIEWER
+}
+
+// Client Management
+model Client {
+  id          String  @id @default(cuid())
+  name        String
+  email       String  @unique
+  phone       String?
+  company     String?
+  address     String?
+  website     String?
+  description String?
+  isActive    Boolean @default(true)
+  
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  // Relations
+  projects Project[]
+
+  // Performance indexes
+  @@index([email])
+  @@index([createdAt])
+  @@map("clients")
+}
+
+// Project Management
+model Project {
+  id          String        @id @default(cuid())
+  name        String
+  description String?
+  status      ProjectStatus @default(PLANNING)
+  priority    Priority      @default(MEDIUM)
+  
+  // Dates
+  startDate   DateTime?
+  endDate     DateTime?
+  deadline    DateTime?
+  
+  // Budget
+  budget      Decimal?
+  spent       Decimal? @default(0)
+  
+  // Progress
+  progress    Int @default(0) // 0-100
+  
+  // Relations
+  ownerId  String
+  owner    User   @relation("ProjectOwner", fields: [ownerId], references: [id])
+  clientId String?
+  client   Client? @relation(fields: [clientId], references: [id])
+  
+  members      ProjectMember[]
+  tasks        Task[]
+  sprints      Sprint[]
+  comments     Comment[]
+  attachments  Attachment[]
+  timeEntries  TimeEntry[]
+  repositories GitRepository[]
+  calendarEvents CalendarEvent[]
+  
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Performance indexes
+  @@index([status])
+  @@index([priority])
+  @@index([ownerId])
+  @@index([clientId])
+  @@index([createdAt])
+  @@index([deadline])
+  @@map("projects")
+}
+
+enum ProjectStatus {
+  PLANNING
+  ACTIVE
+  ON_HOLD
+  COMPLETED
+  CANCELLED
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+// Project Team Management
+model ProjectMember {
+  id        String            @id @default(cuid())
+  role      ProjectMemberRole @default(MEMBER)
+  joinedAt  DateTime          @default(now())
+  
+  // Relations
+  projectId String
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@unique([projectId, userId])
+  @@map("project_members")
+}
+
+enum ProjectMemberRole {
+  LEAD
+  MEMBER
+  VIEWER
+}
+
+// Sprint Management
+model Sprint {
+  id          String      @id @default(cuid())
+  name        String
+  description String?
+  status      SprintStatus @default(PLANNING)
+
+  // Sprint dates
+  startDate   DateTime
+  endDate     DateTime
+
+  // Sprint metrics
+  totalStoryPoints    Int? @default(0)
+  completedStoryPoints Int? @default(0)
+
+  // Relations
+  projectId String
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  tasks Task[]
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("sprints")
+}
+
+// Task Management
+model Task {
+  id          String     @id @default(cuid())
+  title       String
+  description String?
+  status      TaskStatus @default(TODO)
+  priority    Priority   @default(MEDIUM)
+
+  // Time tracking
+  estimatedHours Decimal?
+  actualHours    Decimal? @default(0)
+
+  // Story points for burndown charts
+  storyPoints Int? @default(0)
+
+  // Dates
+  startDate DateTime?
+  dueDate   DateTime?
+  completedAt DateTime?
+
+  // Position for Kanban
+  position Int @default(0)
+
+  // Relations
+  projectId String
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  sprintId String?
+  sprint   Sprint? @relation(fields: [sprintId], references: [id])
+
+  assigneeId String?
+  assignee   User?   @relation(fields: [assigneeId], references: [id])
+
+  parentId String?
+  parent   Task?   @relation("TaskSubtasks", fields: [parentId], references: [id])
+  subtasks Task[]  @relation("TaskSubtasks")
+
+  comments    Comment[]
+  attachments Attachment[]
+  timeEntries TimeEntry[]
+  calendarEvents CalendarEvent[]
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Performance indexes
+  @@index([status])
+  @@index([priority])
+  @@index([assigneeId])
+  @@index([projectId])
+  @@index([sprintId])
+  @@index([createdAt])
+  @@index([dueDate])
+  @@map("tasks")
+}
+
+enum TaskStatus {
+  TODO
+  IN_PROGRESS
+  REVIEW
+  DONE
+  CANCELLED
+}
+
+enum SprintStatus {
+  PLANNING
+  ACTIVE
+  COMPLETED
+  CANCELLED
+}
+
+// Comments System
+model Comment {
+  id      String @id @default(cuid())
+  content String
+  
+  // Relations
+  authorId String
+  author   User   @relation(fields: [authorId], references: [id])
+  
+  projectId String?
+  project   Project? @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  
+  taskId String?
+  task   Task?   @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@map("comments")
+}
+
+// File Attachments
+model Attachment {
+  id       String @id @default(cuid())
+  filename String
+  fileUrl  String
+  fileSize Int
+  mimeType String
+  
+  // Relations
+  projectId String?
+  project   Project? @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  
+  taskId String?
+  task   Task?   @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  
+  // Timestamps
+  createdAt DateTime @default(now())
+  
+  @@map("attachments")
+}
+
+// Time Tracking
+model TimeEntry {
+  id          String    @id @default(cuid())
+  description String?
+  hours       Decimal
+  date        DateTime  @default(now())
+  startTime   DateTime?
+  endTime     DateTime?
+  isRunning   Boolean   @default(false)
+  billable    Boolean   @default(true)
+  hourlyRate  Decimal?
+  tags        String?   // Comma-separated tags
+
+  // Relations
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  projectId String
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  taskId String?
+  task   Task?   @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@map("time_entries")
+}
+
+// Notifications System
+model Notification {
+  id      String           @id @default(cuid())
+  title   String
+  message String
+  type    NotificationType @default(INFO)
+  isRead  Boolean          @default(false)
+
+  // Email notification fields
+  emailSent    Boolean   @default(false)
+  emailSentAt  DateTime?
+  emailError   String?
+
+  // Push notification fields
+  pushSent     Boolean   @default(false)
+  pushSentAt   DateTime?
+  pushError    String?
+
+  // Metadata
+  metadata     String?   // JSON string for additional data
+  actionUrl    String?   // URL for notification action
+  priority     NotificationPriority @default(NORMAL)
+
+  // Relations
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  @@map("notifications")
+}
+
+enum NotificationType {
+  INFO
+  SUCCESS
+  WARNING
+  ERROR
+  TASK_ASSIGNED
+  TASK_COMPLETED
+  PROJECT_UPDATE
+  COMMENT_ADDED
+}
+
+enum NotificationPriority {
+  LOW
+  NORMAL
+  HIGH
+  URGENT
+}
+
+// Notification Settings
+model NotificationSettings {
+  id     String @id @default(cuid())
+
+  // Email settings
+  emailEnabled           Boolean @default(true)
+  emailTaskAssigned      Boolean @default(true)
+  emailTaskCompleted     Boolean @default(true)
+  emailProjectUpdate     Boolean @default(true)
+  emailDeadlineReminder  Boolean @default(true)
+  emailDigestFrequency   String  @default("daily") // daily, weekly, never
+
+  // Push settings
+  pushEnabled            Boolean @default(true)
+  pushTaskAssigned       Boolean @default(true)
+  pushTaskCompleted      Boolean @default(false)
+  pushProjectUpdate      Boolean @default(true)
+  pushDeadlineReminder   Boolean @default(true)
+
+  // Slack settings
+  slackEnabled           Boolean @default(false)
+  slackWebhookUrl        String?
+  slackChannel           String?
+  slackTaskAssigned      Boolean @default(true)
+  slackTaskCompleted     Boolean @default(true)
+  slackProjectUpdate     Boolean @default(true)
+
+  // SMS settings
+  smsEnabled             Boolean @default(false)
+  smsPhoneNumber         String?
+  smsUrgentOnly          Boolean @default(true)
+
+  // Relations
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("notification_settings")
+}
+
+model NotificationRule {
+  id          String  @id @default(cuid())
+  name        String
+  description String?
+  isActive    Boolean @default(true)
+
+  // JSON string containing rule conditions
+  conditions  String  // JSON: { projectIds, taskTypes, priorities, assigneeIds, keywords, timeConditions }
+
+  // JSON string containing rule actions
+  actions     String  // JSON: { sendEmail, sendPush, sendSlack, sendSMS, customMessage, delay }
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("notification_rules")
+}
+
+// Reports System
+model Report {
+  id          String     @id @default(cuid())
+  name        String
+  description String?
+  type        ReportType @default(CUSTOM)
+
+  // Report configuration
+  filters     String?    // JSON string
+  metrics     String?    // JSON string
+  groupBy     String?    // JSON string
+  sortBy      String?
+  sortOrder   String?    @default("desc")
+
+  // Access control
+  isPublic    Boolean    @default(false)
+
+  // Relations
+  createdById String
+  createdBy   User       @relation(fields: [createdById], references: [id])
+
+  // Timestamps
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  @@map("reports")
+}
+
+enum ReportType {
+  PROJECT_SUMMARY
+  TIME_TRACKING
+  TEAM_PERFORMANCE
+  SPRINT_ANALYSIS
+  CUSTOM
+}
+
+// Integration Models
+model Integration {
+  id          String            @id @default(cuid())
+  name        String
+  type        IntegrationType
+  isActive    Boolean           @default(true)
+
+  // Configuration stored as JSON
+  config      String            // JSON: provider-specific configuration
+
+  // OAuth tokens and credentials
+  accessToken String?
+  refreshToken String?
+  expiresAt   DateTime?
+
+  // Webhook configuration
+  webhookUrl  String?
+  webhookSecret String?
+
+  // Last sync information
+  lastSyncAt  DateTime?
+  syncStatus  SyncStatus        @default(PENDING)
+  syncError   String?
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Relations
+  syncLogs    IntegrationSyncLog[]
+  webhooks    WebhookLog[]
+  repositories GitRepository[]
+  calendarEvents CalendarEvent[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, type])
+  @@map("integrations")
+}
+
+model IntegrationSyncLog {
+  id            String      @id @default(cuid())
+
+  integrationId String
+  integration   Integration @relation(fields: [integrationId], references: [id], onDelete: Cascade)
+
+  action        String      // sync, import, export, webhook
+  status        SyncStatus
+
+  // Sync details
+  itemsProcessed Int        @default(0)
+  itemsSuccess   Int        @default(0)
+  itemsError     Int        @default(0)
+
+  // Error details
+  errorMessage   String?
+  errorDetails   String?    // JSON: detailed error information
+
+  // Metadata
+  metadata       String?    // JSON: sync-specific data
+
+  startedAt DateTime @default(now())
+  completedAt DateTime?
+
+  createdAt DateTime @default(now())
+
+  @@map("integration_sync_logs")
+}
+
+model WebhookLog {
+  id            String      @id @default(cuid())
+
+  integrationId String?
+  integration   Integration? @relation(fields: [integrationId], references: [id], onDelete: SetNull)
+
+  // Webhook details
+  method        String      // POST, PUT, etc.
+  url           String
+  headers       String      // JSON: request headers
+  payload       String      // JSON: request payload
+
+  // Response details
+  statusCode    Int?
+  responseBody  String?
+  responseTime  Int?        // milliseconds
+
+  // Processing
+  processed     Boolean     @default(false)
+  processedAt   DateTime?
+  errorMessage  String?
+
+  // Retry information
+  retryCount    Int         @default(0)
+  maxRetries    Int         @default(3)
+  nextRetryAt   DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("webhook_logs")
+}
+
+model GitRepository {
+  id            String      @id @default(cuid())
+
+  integrationId String
+  integration   Integration @relation(fields: [integrationId], references: [id], onDelete: Cascade)
+
+  // Repository details
+  provider      String      // github, gitlab
+  repoId        String      // external repository ID
+  name          String
+  fullName      String      // owner/repo
+  url           String
+  defaultBranch String      @default("main")
+
+  // Project mapping
+  projectId     String?
+  project       Project?    @relation(fields: [projectId], references: [id], onDelete: SetNull)
+
+  // Sync configuration
+  syncCommits   Boolean     @default(true)
+  syncIssues    Boolean     @default(true)
+  syncPRs       Boolean     @default(true)
+  syncBranches  Boolean     @default(false)
+
+  // Last sync info
+  lastCommitSha String?
+  lastSyncAt    DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([integrationId, repoId])
+  @@map("git_repositories")
+}
+
+model CalendarEvent {
+  id            String      @id @default(cuid())
+
+  integrationId String
+  integration   Integration @relation(fields: [integrationId], references: [id], onDelete: Cascade)
+
+  // Event details
+  externalId    String      // Google Calendar event ID
+  title         String
+  description   String?
+  location      String?
+
+  // Timing
+  startTime     DateTime
+  endTime       DateTime
+  isAllDay      Boolean     @default(false)
+  timezone      String?
+
+  // Recurrence
+  isRecurring   Boolean     @default(false)
+  recurrenceRule String?    // RRULE format
+
+  // Project/Task mapping
+  projectId     String?
+  project       Project?    @relation(fields: [projectId], references: [id], onDelete: SetNull)
+
+  taskId        String?
+  task          Task?       @relation(fields: [taskId], references: [id], onDelete: SetNull)
+
+  // Sync info
+  lastSyncAt    DateTime?
+  syncStatus    SyncStatus  @default(SYNCED)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([integrationId, externalId])
+  @@map("calendar_events")
+}
+
+// Enums for integrations
+enum IntegrationType {
+  GITHUB
+  GITLAB
+  JIRA
+  GOOGLE_CALENDAR
+  ZAPIER
+  SLACK
+  MICROSOFT_TEAMS
+  TRELLO
+  ASANA
+  LINEAR
+}
+
+enum SyncStatus {
+  PENDING
+  IN_PROGRESS
+  SYNCED
+  ERROR
+  CANCELLED
+}

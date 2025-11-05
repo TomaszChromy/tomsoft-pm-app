@@ -1,0 +1,487 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* TomSoft PM App - Modern Elegant Theme */
+:root {
+  /* Modern Color Palette */
+  --primary: #6366f1;
+  --primary-light: #818cf8;
+  --primary-dark: #4f46e5;
+  --secondary: #f59e0b;
+  --accent: #06b6d4;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --error: #ef4444;
+  
+  /* Neutral Colors */
+  --background: #ffffff;
+  --surface: #f8fafc;
+  --surface-elevated: #ffffff;
+  --border: #e2e8f0;
+  --border-light: #f1f5f9;
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #94a3b8;
+  
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  
+  /* Spacing & Layout */
+  --radius: 0.75rem;
+  --radius-sm: 0.5rem;
+  --radius-lg: 1rem;
+  --spacing-unit: 0.25rem;
+}
+
+/* Base styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  /* Mobile optimizations */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  /* Prevent zoom on input focus on iOS */
+  -webkit-text-size-adjust: 100%;
+  /* Prevent pull-to-refresh */
+  overscroll-behavior-y: contain;
+  background: var(--background);
+  color: var(--text-primary);
+  overflow-x: hidden;
+  line-height: 1.6;
+  min-height: 100vh;
+  position: relative;
+  font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Subtle dot pattern background */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: radial-gradient(circle at 1px 1px, rgba(99, 102, 241, 0.08) 1px, transparent 0);
+  background-size: 24px 24px;
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Modern scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+  transition: background 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* Component styles */
+@layer components {
+  .btn-primary {
+    @apply bg-indigo-600 text-white font-medium px-6 py-3 rounded-xl transition-all duration-200 hover:bg-indigo-700 hover:shadow-lg hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2;
+    box-shadow: var(--shadow-md);
+  }
+  
+  .btn-secondary {
+    @apply border border-slate-200 text-slate-700 bg-white font-medium px-6 py-3 rounded-xl transition-all duration-200 hover:bg-slate-50 hover:border-slate-300 hover:shadow-md hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2;
+  }
+  
+  .card-modern {
+    @apply bg-white border border-slate-200 rounded-2xl p-6 transition-all duration-200 hover:shadow-lg hover:-translate-y-1;
+    box-shadow: var(--shadow);
+  }
+  
+  .input-modern {
+    @apply bg-white border border-slate-200 text-slate-900 px-4 py-3 rounded-xl focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-0 transition-all duration-200;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .text-gradient {
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  .glass-effect {
+    background: rgba(255, 255, 255, 0.8);
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  
+  .sidebar-nav {
+    @apply w-72 bg-white border-r border-slate-200 h-screen fixed left-0 top-0 z-40;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(248, 250, 252, 0.95));
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+    box-shadow: var(--shadow-lg);
+  }
+  
+  .main-content {
+    @apply ml-72 min-h-screen bg-slate-50;
+  }
+
+  .stat-card {
+    @apply card-modern p-8 text-center;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(248, 250, 252, 0.9));
+  }
+  
+  .stat-value {
+    @apply text-4xl font-bold text-gradient mb-3;
+    font-family: 'Manrope', sans-serif;
+  }
+  
+  .stat-label {
+    @apply text-slate-500 text-sm font-medium uppercase tracking-wider;
+  }
+  
+  .project-card {
+    @apply card-modern hover:border-indigo-200 transition-all duration-300 cursor-pointer;
+  }
+  
+  .project-card:hover {
+    box-shadow: var(--shadow-xl);
+    transform: translateY(-4px);
+    border-color: rgb(199 210 254);
+  }
+}
+
+/* Modern floating elements animation */
+@keyframes float-gentle {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-10px) rotate(1deg); }
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.floating-element {
+  animation: float-gentle 6s ease-in-out infinite;
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.6s ease-out forwards;
+}
+
+.animate-scale-in {
+  animation: scale-in 0.4s ease-out forwards;
+}
+
+/* Loading spinner */
+.loading-spinner {
+  @apply w-8 h-8 border-2 border-indigo-200 border-t-indigo-600 rounded-full animate-spin;
+}
+
+/* Form styles */
+.form-label {
+  @apply block text-slate-600 text-sm font-medium mb-2 uppercase tracking-wider;
+}
+
+.form-input {
+  @apply input-modern w-full;
+}
+
+.form-error {
+  @apply text-red-500 text-sm mt-1;
+}
+
+/* Status badges */
+.status-todo {
+  @apply bg-slate-100 text-slate-700 px-3 py-1 rounded-full text-xs font-medium;
+}
+
+.status-progress {
+  @apply bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-medium;
+}
+
+.status-review {
+  @apply bg-amber-100 text-amber-700 px-3 py-1 rounded-full text-xs font-medium;
+}
+
+.status-done {
+  @apply bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full text-xs font-medium;
+}
+
+/* Priority badges */
+.priority-low {
+  @apply bg-slate-100 text-slate-600 px-2 py-1 rounded text-xs;
+}
+
+.priority-medium {
+  @apply bg-amber-100 text-amber-600 px-2 py-1 rounded text-xs;
+}
+
+.priority-high {
+  @apply bg-rose-100 text-rose-600 px-2 py-1 rounded text-xs;
+}
+
+.priority-urgent {
+  @apply bg-red-100 text-red-600 px-2 py-1 rounded text-xs font-medium;
+}
+
+/* Mobile-first responsive utilities */
+@media (max-width: 768px) {
+  .sidebar-nav {
+    @apply -translate-x-full;
+  }
+
+  .sidebar-nav.open {
+    @apply translate-x-0;
+  }
+
+  .main-content {
+    @apply ml-0 pb-20; /* Add bottom padding for mobile navigation */
+  }
+}
+
+/* PWA and Mobile Enhancements */
+
+/* Slide-up animation for mobile menu */
+@keyframes slide-up {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-up {
+  animation: slide-up 0.3s ease-out;
+}
+
+/* Touch-friendly interactive elements */
+@media (hover: none) and (pointer: coarse) {
+  /* Mobile touch targets */
+  button,
+  [role="button"],
+  input[type="submit"],
+  input[type="button"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Remove hover effects on touch devices */
+  .hover\:bg-slate-50:hover {
+    background-color: inherit;
+  }
+
+  /* Enhanced tap targets for mobile */
+  .mobile-tap-target {
+    @apply p-3 -m-3;
+  }
+}
+
+/* Safe area handling for devices with notches */
+@supports (padding: max(0px)) {
+  .safe-area-top {
+    padding-top: max(1rem, env(safe-area-inset-top));
+  }
+
+  .safe-area-bottom {
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  }
+
+  .safe-area-left {
+    padding-left: max(1rem, env(safe-area-inset-left));
+  }
+
+  .safe-area-right {
+    padding-right: max(1rem, env(safe-area-inset-right));
+  }
+}
+
+/* PWA display mode styles */
+@media (display-mode: standalone) {
+  /* Hide elements that are not needed in standalone mode */
+  .pwa-hide {
+    display: none;
+  }
+
+  /* Adjust layout for standalone mode */
+  body {
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  :root {
+    --border: #000000;
+    --text-primary: #000000;
+    --text-secondary: #000000;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Dark mode support (basic) */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0f172a;
+    --surface: #1e293b;
+    --surface-elevated: #334155;
+    --border: #475569;
+    --border-light: #334155;
+    --text-primary: #f8fafc;
+    --text-secondary: #cbd5e1;
+    --text-muted: #64748b;
+  }
+}
+
+/* Mobile keyboard handling */
+.mobile-keyboard-adjust {
+  /* Adjust viewport when mobile keyboard is open */
+  height: 100vh;
+  height: -webkit-fill-available;
+}
+
+/* Prevent zoom on input focus (iOS) */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="tel"],
+input[type="url"],
+input[type="search"],
+textarea,
+select {
+  font-size: 16px; /* Prevents zoom on iOS */
+}
+
+/* Custom scrollbar for mobile */
+@media (max-width: 768px) {
+  ::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 2px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.3);
+  }
+}
+
+/* Pull-to-refresh prevention */
+.prevent-pull-refresh {
+  overscroll-behavior-y: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Mobile-optimized card layouts */
+@media (max-width: 640px) {
+  .mobile-card-stack {
+    @apply space-y-4;
+  }
+
+  .mobile-card-stack > * {
+    @apply w-full;
+  }
+
+  /* Responsive grid adjustments */
+  .grid-responsive {
+    @apply grid-cols-1;
+  }
+
+  .grid-responsive-2 {
+    @apply grid-cols-1 sm:grid-cols-2;
+  }
+}
+
+/* Offline indicator styles */
+.offline-indicator {
+  @apply fixed top-0 left-0 right-0 bg-yellow-500 text-white text-center py-2 text-sm font-medium z-50;
+  transform: translateY(-100%);
+  transition: transform 0.3s ease-in-out;
+}
+
+.offline-indicator.show {
+  transform: translateY(0);
+}
+
+/* Loading states optimized for mobile */
+.mobile-loading {
+  @apply flex items-center justify-center p-8;
+}
+
+.mobile-loading-spinner {
+  @apply animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600;
+}
+
+/* Mobile-friendly form styles */
+.mobile-form {
+  @apply space-y-6;
+}
+
+.mobile-form input,
+.mobile-form textarea,
+.mobile-form select {
+  @apply w-full p-4 text-base border border-slate-300 rounded-lg;
+}
+
+.mobile-form button {
+  @apply w-full py-4 text-base font-medium rounded-lg;
+}
