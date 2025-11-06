@@ -1,79 +1,232 @@
-# TomSoft PM App - Cyberpunk Edition
+# TomSoft PM - System Zarządzania Projektami
 
-> **Technology with soul** - Professional Project Management Application with Cyberpunk Aesthetics
+> **Profesjonalny system zarządzania projektami** - Nowoczesna aplikacja webowa stworzona przez Tomasza Chromy
 
-A modern, full-stack project management application built with Next.js and cyberpunk design inspired by your mockup. Features dark theme, neon colors, animated background lines, and futuristic UI elements.
+Zaawansowany, pełnofunkcjonalny system zarządzania projektami zbudowany w Next.js 16 z React 18, TypeScript, Prisma i PostgreSQL. Aplikacja oferuje kompletne rozwiązanie dla zespołów programistycznych i firm potrzebujących efektywnego narzędzia do zarządzania projektami, zadaniami i zespołami.
 
-## 🌟 Features
+## 📸 Screenshoty
 
-- **🎨 Cyberpunk Design** - Dark theme with neon colors and animated elements
-- **📊 Dashboard** - Real-time project metrics and KPIs
-- **📁 Project Management** - Complete project lifecycle tracking
-- **✅ Task Management** - Kanban board with drag & drop
-- **👥 Team Management** - User roles and permissions
-- **🔐 Authentication** - Secure login system
-- **📱 Responsive Design** - Works on all devices
-- **⚡ Animated UI** - Smooth transitions and effects
+![Dashboard](./screenshots/dashboard.png)
+*Główny dashboard z metrykami projektów*
 
-## 🎨 Design Features
+![Projekty](./screenshots/projects.png)
+*Zarządzanie projektami*
 
-### Cyberpunk Aesthetics
-- **Dark Background**: Deep space-like dark theme (#0a0a0f)
-- **Neon Colors**: Cyan (#00ffff), Magenta (#ff00ff), Orange (#ff6b35)
-- **Animated Lines**: Flowing background lines across the screen
-- **Glitch Effects**: Subtle glitch animations on hover
-- **Tech Grid**: Subtle grid pattern background
-- **Neon Glows**: Text and border glow effects
+![Kanban](./screenshots/tasks-kanban.png)
+*Tablica Kanban z zadaniami*
 
-### Typography
-- **Orbitron**: Futuristic headings and accents
-- **Rajdhani**: Clean, tech-inspired body text
-- **Tahoma**: Fallback for maximum compatibility
+## 👨‍💻 Autor
 
-### Layout
-- **Golden Ratio**: 62/38 layout proportions
-- **Fibonacci Spacing**: Mathematical spacing system
-- **Card Design**: Glassmorphism-inspired cards
-- **Sidebar Navigation**: Fixed sidebar with smooth animations
+**Tomasz Chromy**
+- 📧 Email: tomasz.chromy@outlook.com
+- 🐙 GitHub: https://github.com/tomaszchroma
+- 💼 LinkedIn: https://linkedin.com/in/tomasz-chromy
 
-## 🚀 Quick Start
+**Copyright © 2024 Tomasz Chromy. Wszelkie prawa zastrzeżone.**
 
-### Prerequisites
+## 🌟 Główne Funkcje
 
-- Node.js 18+ 
-- pnpm 8+
+### 🔐 Bezpieczeństwo i Autentykacja
+- **Bezpieczne logowanie** z hashowaniem haseł (bcrypt 12 rounds)
+- **Dwuskładnikowa autentykacja (2FA)** z Google Authenticator
+- **Role-based access control** - Admin, PM, Developer, Client
+- **JWT tokens** z automatycznym odświeżaniem
+- **Rate limiting** - ochrona przed atakami brute force
 
-### Installation
+### 📊 Dashboard i Analityka
+- **Interaktywny dashboard** z kluczowymi metrykami w czasie rzeczywistym
+- **Wykresy postępu projektów** z wizualizacją danych
+- **Statystyki zespołu** i analiza wydajności
+- **Raporty** z możliwością eksportu do PDF/Excel
+- **Analiza budżetu** i śledzenie kosztów
 
-1. **Clone and setup**
-   ```bash
-   cd tomsoft-pm-app
-   pnpm install
-   ```
+### 📁 Zarządzanie Projektami
+- **Pełny cykl życia projektu** od planowania do zakończenia
+- **Statusy projektów** - Planowany, Aktywny, Wstrzymany, Zakończony
+- **Zarządzanie zespołami** projektowymi z rolami
+- **Śledzenie deadline'ów** i budżetów
+- **Historia zmian** i audyt działań
 
-2. **Start development server**
-   ```bash
-   pnpm dev
-   ```
+### ✅ Zarządzanie Zadaniami
+- **Tablica Kanban** z funkcją drag & drop
+- **Priorytety zadań** - Niski, Średni, Wysoki, Krytyczny
+- **Przypisywanie zadań** do członków zespołu
+- **Komentarze i załączniki** do zadań
+- **Śledzenie czasu** pracy z timerem
 
-3. **Open in browser**
-   ```
-   http://localhost:3000
-   ```
+### 👥 Zarządzanie Zespołem
+- **Profile użytkowników** z avatarami i statystykami
+- **System uprawnień** na poziomie projektu i systemu
+- **Zarządzanie rolami** i dostępem do funkcji
+- **Historia aktywności** i logi użytkowników
+
+### 🔔 System Powiadomień
+- **Real-time notifications** przez Socket.io
+- **Email notifications** dla ważnych wydarzeń
+- **Push notifications** (PWA)
+- **Konfiguracja preferencji** powiadomień
+
+### 📱 Progressive Web App (PWA)
+- **Instalacja na urządzeniach** mobilnych i desktop
+- **Offline functionality** - podstawowe funkcje bez internetu
+- **Service Worker** dla cache'owania zasobów
+- **Responsive design** - pełna funkcjonalność na wszystkich urządzeniach
+
+### 🔗 Integracje
+- **Slack** - powiadomienia o projektach i zadaniach
+- **GitHub** - synchronizacja z repozytoriami kodu
+- **Google Calendar** - integracja z kalendarzem
+- **Zapier** - automatyzacja workflow
+- **Webhooks** - integracja z zewnętrznymi systemami
+
+## 🛠️ Technologie
+
+### Frontend
+- **Next.js 16** - React framework z App Router i Turbopack
+- **React 18** - najnowsza wersja z Concurrent Features
+- **TypeScript** - statyczne typowanie dla lepszej jakości kodu
+- **Tailwind CSS** - utility-first CSS framework
+- **React Query v3** - zarządzanie stanem serwera i cache'owanie
+- **Socket.io Client** - komunikacja w czasie rzeczywistym
+- **Lucide React** - nowoczesne ikony SVG
+
+### Backend
+- **Next.js API Routes** - serverless functions
+- **Prisma ORM** - type-safe database access layer
+- **PostgreSQL** - relacyjna baza danych
+- **JWT** - JSON Web Tokens dla autentykacji
+- **bcryptjs** - bezpieczne hashowanie haseł
+- **Socket.io** - WebSocket server dla real-time
+- **Zod** - walidacja schematów danych
+
+### Bezpieczeństwo
+- **Input validation** z biblioteką Zod
+- **SQL injection protection** dzięki Prisma ORM
+- **XSS protection** - sanityzacja danych wejściowych
+- **CORS configuration** - kontrola dostępu cross-origin
+- **Rate limiting** - ochrona przed spam'em i atakami
+- **Security headers** - dodatkowe nagłówki bezpieczeństwa
+
+### Performance i Optymalizacja
+- **Code splitting** - ładowanie komponentów na żądanie
+- **Image optimization** - automatyczna optymalizacja obrazów
+- **Caching strategies** - inteligentne cache'owanie danych
+- **Database indexing** - optymalizacja zapytań SQL
+- **Lazy loading** - opóźnione ładowanie komponentów
+
+## 📋 Wymagania Systemowe
+
+### Minimalne
+- **Node.js**: 18.0+
+- **PostgreSQL**: 14.0+
+- **RAM**: 2GB
+- **Dysk**: 1GB wolnego miejsca
+- **Przeglądarka**: Chrome 90+, Firefox 88+, Safari 14+
+
+### Zalecane
+- **Node.js**: 20.0+
+- **PostgreSQL**: 15.0+
+- **RAM**: 4GB+
+- **Dysk**: 5GB+ (z logami i cache)
+- **Przeglądarka**: Najnowsze wersje
+
+## 🚀 Instalacja
+
+### 1. Sklonuj repozytorium
+```bash
+git clone https://github.com/tomaszchroma/tomsoft-pm-app.git
+cd tomsoft-pm-app
+```
+
+### 2. Zainstaluj zależności
+```bash
+npm install
+# lub
+yarn install
+```
+
+### 3. Skonfiguruj zmienne środowiskowe
+```bash
+cp .env.example .env.local
+```
+
+Wypełnij `.env.local`:
+```env
+DATABASE_URL="postgresql://username:password@localhost:5432/tomsoft_pm"
+JWT_SECRET="your-super-secret-jwt-key-min-32-characters"
+NEXTAUTH_SECRET="your-nextauth-secret-key"
+NEXTAUTH_URL="http://localhost:3002"
+BCRYPT_ROUNDS=12
+```
+
+### 4. Skonfiguruj bazę danych
+```bash
+# Wygeneruj Prisma Client
+npx prisma generate
+
+# Zsynchronizuj schemat z bazą danych
+npx prisma db push
+
+# Zasilij bazę danymi testowymi
+npx prisma db seed
+```
+
+### 5. Uruchom aplikację
+```bash
+npm run dev
+```
+
+Aplikacja będzie dostępna pod adresem: **http://localhost:3002**
+
+## 👤 Konta Testowe
+
+Po uruchomieniu `npx prisma db seed` dostępne będą następujące konta:
+
+| Rola | Email | Hasło | Opis |
+|------|-------|-------|------|
+| 🔴 **Admin** | admin@tomsoft.pl | password123 | Pełne uprawnienia systemu |
+| 🟠 **Project Manager** | pm@tomsoft.pl | password123 | Zarządzanie projektami |
+| 🟡 **Developer** | dev@tomsoft.pl | password123 | Praca nad zadaniami |
+| 🟡 **Developer** | maria@tomsoft.pl | password123 | Drugi developer |
+| 🟢 **Client** | client@example.com | password123 | Klient zewnętrzny |
+
+## 📚 Dokumentacja
+
+### Kompletna dokumentacja znajduje się w folderze `/docs`:
+
+- 📖 **[Przegląd aplikacji](./docs/overview.md)** - Szczegółowy opis funkcji
+- 🚀 **[Instrukcja obsługi](./docs/user-guide.md)** - Kompletny przewodnik użytkownika
+- ⚙️ **[Konfiguracja](./docs/configuration.md)** - Ustawienia i konfiguracja
+- 🔧 **[API Documentation](./docs/api-documentation.md)** - Dokumentacja API
+- 🆘 **[Rozwiązywanie problemów](./docs/troubleshooting.md)** - Pomoc techniczna
+- ⚖️ **[Prawa autorskie](./docs/copyright.md)** - Licencja i prawa autorskie
+
+### Szybki dostęp:
+- **Dashboard**: Główny panel po zalogowaniu
+- **Projekty**: `/projects` - Zarządzanie projektami
+- **Zadania**: `/tasks` - Tablica Kanban
+- **Zespół**: `/team` - Zarządzanie użytkownikami
+- **Analityka**: `/analytics` - Raporty i statystyki
 
 ## 🔧 Development
 
-### Available Scripts
+### Dostępne skrypty
 
 ```bash
 # Development
-pnpm dev              # Start development server
-pnpm build            # Build for production
-pnpm start            # Start production server
+npm run dev           # Uruchom serwer deweloperski
+npm run build         # Zbuduj aplikację
+npm run start         # Uruchom w trybie produkcyjnym
 
-# Quality
-pnpm lint             # Lint code
-pnpm type-check       # TypeScript checking
+# Quality & Testing
+npm run lint          # Sprawdź kod z ESLint
+npm run type-check    # Sprawdź typy TypeScript
+
+# Database
+npx prisma studio     # Otwórz Prisma Studio
+npx prisma generate   # Wygeneruj Prisma Client
+npx prisma db push    # Zsynchronizuj schemat z bazą
+npx prisma db seed    # Zasilij bazę danymi testowymi
 ```
 
 ### Project Structure
@@ -147,46 +300,88 @@ The application is fully responsive with:
 - **Tablet**: Optimized layout for medium screens
 - **Desktop**: Full sidebar navigation, multi-column layouts
 
-## 🔮 Future Enhancements
+## 📁 Struktura Projektu
 
-- **Backend Integration**: NestJS API with PostgreSQL
-- **Real-time Updates**: WebSocket connections
-- **Advanced Animations**: More complex particle effects
-- **3D Elements**: Three.js integration for 3D UI elements
-- **Sound Effects**: Cyberpunk-themed UI sounds
-- **Theme Customization**: Multiple cyberpunk color schemes
+```
+tomsoft-pm-app/
+├── docs/                    # Dokumentacja
+│   ├── overview.md         # Przegląd aplikacji
+│   ├── user-guide.md       # Instrukcja obsługi
+│   └── copyright.md        # Prawa autorskie
+├── screenshots/            # Screenshoty aplikacji
+├── prisma/                 # Schema bazy danych i seedy
+│   ├── schema.prisma      # Definicja modeli
+│   └── seed.ts            # Dane testowe
+├── public/                 # Pliki statyczne
+├── src/
+│   ├── app/               # Next.js App Router
+│   │   ├── api/          # API endpoints
+│   │   ├── dashboard/    # Dashboard użytkownika
+│   │   ├── projects/     # Zarządzanie projektami
+│   │   ├── tasks/        # Zarządzanie zadaniami
+│   │   └── team/         # Zarządzanie zespołem
+│   ├── components/        # Komponenty React
+│   ├── contexts/          # React Context providers
+│   ├── hooks/            # Custom React hooks
+│   ├── lib/              # Utilities i konfiguracja
+│   └── types/            # TypeScript type definitions
+├── .env.example          # Przykład zmiennych środowiskowych
+├── package.json          # Zależności i skrypty
+└── README.md            # Ten plik
+```
 
-## 🎯 Demo Features
+## 🚀 Roadmap
 
-Current demo includes:
+### Wersja 2.0 (Q1 2025)
+- [ ] Zaawansowane raporty z AI
+- [ ] Integracja z Microsoft Teams
+- [ ] Mobile app (React Native)
+- [ ] Advanced project templates
 
-- **Dashboard**: Stats cards with animated counters
-- **Project Cards**: Progress bars with gradient fills
-- **Activity Feed**: Real-time activity simulation
-- **Sidebar Navigation**: Smooth hover animations
-- **Responsive Design**: Mobile-friendly interface
+### Wersja 2.1 (Q2 2025)
+- [ ] Time tracking z automatycznym wykrywaniem
+- [ ] Gantt charts
+- [ ] Resource management
+- [ ] Multi-language support
 
-## 🛠️ Tech Stack
+## 🤝 Wkład w Projekt
 
-- **Frontend**: Next.js 14, TypeScript, TailwindCSS
-- **Animations**: Framer Motion
-- **Icons**: Lucide React
-- **Fonts**: Google Fonts (Orbitron, Rajdhani)
-- **Build Tool**: Turbo (monorepo)
-- **Package Manager**: pnpm
+1. Fork projektu
+2. Utwórz branch dla nowej funkcji (`git checkout -b feature/AmazingFeature`)
+3. Commit zmian (`git commit -m 'Add some AmazingFeature'`)
+4. Push do brancha (`git push origin feature/AmazingFeature`)
+5. Otwórz Pull Request
 
-## 📄 License
+## 📞 Kontakt i Wsparcie
 
-This project is licensed under the MIT License.
+**Tomasz Chromy**
+- 📧 Email: tomasz.chromy@outlook.com
+- 🐙 GitHub: https://github.com/tomaszchroma
+- 💼 LinkedIn: https://linkedin.com/in/tomasz-chromy
 
-## 🙏 Acknowledgments
+W przypadku problemów lub pytań:
+- Utwórz [Issue na GitHub](https://github.com/tomaszchroma/tomsoft-pm-app/issues)
+- Wyślij email z opisem problemu
+- Sprawdź [dokumentację](./docs/) w poszukiwaniu rozwiązania
 
-- **TomSoft Team** - For the vision and cyberpunk design inspiration
-- **Cyberpunk 2077** - Visual inspiration for the UI design
-- **Blade Runner** - Aesthetic influence for the dark theme
+## ⚖️ Licencja i Prawa Autorskie
+
+**Copyright © 2024 Tomasz Chromy. Wszelkie prawa zastrzeżone.**
+
+Ten projekt jest własnością intelektualną Tomasza Chromy. Szczegółowe informacje o prawach autorskich i licencji znajdują się w pliku [docs/copyright.md](./docs/copyright.md).
+
+### Dozwolone:
+- ✅ Przeglądanie kodu źródłowego
+- ✅ Uczenie się z kodu
+- ✅ Tworzenie forków do celów edukacyjnych
+
+### Zabronione bez pisemnej zgody:
+- ❌ Komercyjne wykorzystanie
+- ❌ Redystrybucja kodu
+- ❌ Używanie nazwy "TomSoft"
 
 ---
 
-**Built with ❤️ by TomSoft - Technology with soul**
+**Zbudowane z ❤️ przez Tomasza Chromy**
 
-For support, email us at support@tomsoft.pl
+*TomSoft PM - Profesjonalny system zarządzania projektami*
