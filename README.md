@@ -4,23 +4,12 @@
 
 Zaawansowany, pełnofunkcjonalny system zarządzania projektami zbudowany w Next.js 16 z React 18, TypeScript, Prisma i PostgreSQL. Aplikacja oferuje kompletne rozwiązanie dla zespołów programistycznych i firm potrzebujących efektywnego narzędzia do zarządzania projektami, zadaniami i zespołami.
 
-## 📸 Screenshoty
 
-![Dashboard](./screenshots/dashboard.png)
-*Główny dashboard z metrykami projektów*
-
-![Projekty](./screenshots/projects.png)
-*Zarządzanie projektami*
-
-![Kanban](./screenshots/tasks-kanban.png)
-*Tablica Kanban z zadaniami*
 
 ## 👨‍💻 Autor
 
 **Tomasz Chromy**
 - 📧 Email: tomasz.chromy@outlook.com
-- 🐙 GitHub: https://github.com/tomaszchroma
-- 💼 LinkedIn: https://linkedin.com/in/tomasz-chromy
 
 **Copyright © 2024 Tomasz Chromy. Wszelkie prawa zastrzeżone.**
 
@@ -308,7 +297,6 @@ tomsoft-pm-app/
 │   ├── overview.md         # Przegląd aplikacji
 │   ├── user-guide.md       # Instrukcja obsługi
 │   └── copyright.md        # Prawa autorskie
-├── screenshots/            # Screenshoty aplikacji
 ├── prisma/                 # Schema bazy danych i seedy
 │   ├── schema.prisma      # Definicja modeli
 │   └── seed.ts            # Dane testowe
@@ -356,8 +344,6 @@ tomsoft-pm-app/
 
 **Tomasz Chromy**
 - 📧 Email: tomasz.chromy@outlook.com
-- 🐙 GitHub: https://github.com/tomaszchroma
-- 💼 LinkedIn: https://linkedin.com/in/tomasz-chromy
 
 W przypadku problemów lub pytań:
 - Utwórz [Issue na GitHub](https://github.com/tomaszchroma/tomsoft-pm-app/issues)

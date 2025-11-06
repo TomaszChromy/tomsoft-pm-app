@@ -10,8 +10,6 @@ Copyright © 2024 Tomasz Chromy. Wszelkie prawa zastrzeżone.
 
 **Tomasz Chromy**
 - Email: tomasz.chromy@outlook.com
-- GitHub: https://github.com/tomaszchroma
-- LinkedIn: https://linkedin.com/in/tomasz-chromy
 
 ## Licencja
 
