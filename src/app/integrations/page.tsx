@@ -65,6 +65,12 @@ const integrationTypes = {
     icon: '💬',
     color: 'bg-purple-600 text-white',
   },
+  TEAMS: {
+    name: 'Microsoft Teams',
+    description: 'Send notifications, create meetings, and sync presence',
+    icon: '🟦',
+    color: 'bg-blue-600 text-white',
+  },
 }
 
 export default function IntegrationsPage() {
@@ -319,8 +325,13 @@ export default function IntegrationsPage() {
                 <button
                   key={type}
                   onClick={() => {
-                    // Handle integration setup
-                    alert(`${info.name} integration setup coming soon!`)
+                    if (type === 'TEAMS') {
+                      // Redirect to Teams integration page
+                      window.location.href = '/integrations/teams'
+                    } else {
+                      // Handle other integration setup
+                      alert(`${info.name} integration setup coming soon!`)
+                    }
                     setShowAddModal(false)
                   }}
                   className="text-left p-4 border border-gray-200 rounded-lg hover:border-blue-300 hover:bg-blue-50 transition-colors"

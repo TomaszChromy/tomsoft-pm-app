@@ -32,7 +32,10 @@ model User {
 
   // Role-based permissions
   permissions      String? // JSON array of permissions
-  
+
+  // Integrations
+  teamsUserId      String? // Microsoft Teams User ID for presence sync
+
   // Timestamps
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -49,6 +52,8 @@ model User {
   notificationSettings NotificationSettings?
   notificationRules    NotificationRule[]
   integrations         Integration[]
+  organizedMeetings    Meeting[]             @relation("MeetingOrganizer")
+  participantMeetings  Meeting[]             @relation("MeetingParticipants")
 
   // Performance indexes
   @@index([email])
@@ -125,6 +130,7 @@ model Project {
   timeEntries  TimeEntry[]
   repositories GitRepository[]
   calendarEvents CalendarEvent[]
+  meetings     Meeting[]
   
   // Timestamps
   createdAt DateTime @default(now())
@@ -699,4 +705,31 @@ enum SyncStatus {
   SYNCED
   ERROR
   CANCELLED
+}
+
+// Teams Meeting Management
+model Meeting {
+  id              String   @id @default(cuid())
+  title           String
+  agenda          String?
+  startTime       DateTime
+  duration        Int      // Duration in minutes
+  teamsUrl        String?  // Teams meeting join URL
+  teamsMeetingId  String?  // Teams meeting ID
+
+  // Relations
+  projectId       String?
+  project         Project? @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  organizerId     String
+  organizer       User     @relation("MeetingOrganizer", fields: [organizerId], references: [id])
+  participants    User[]   @relation("MeetingParticipants")
+
+  // Timestamps
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([projectId])
+  @@index([organizerId])
+  @@index([startTime])
+  @@map("meetings")
 }
