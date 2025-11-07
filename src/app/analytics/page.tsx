@@ -11,6 +11,8 @@ import { ExportReports } from '@/components/analytics/export-reports'
 import { DateRangePicker } from '@/components/analytics/date-range-picker'
 import { AIInsights } from '@/components/analytics/ai-insights'
 import { AIRecommendations } from '@/components/analytics/ai-recommendations'
+import { EnhancedCharts } from '@/components/analytics/enhanced-charts'
+import { ExportManager } from '@/components/analytics/export-manager'
 import { useAnalytics } from '@/hooks/use-analytics'
 import { 
   BarChart3, 
@@ -256,6 +258,9 @@ export default function AnalyticsPage() {
           <BudgetAnalysisChart data={analyticsData?.budgetAnalysis || []} />
         </div>
 
+        {/* Enhanced Charts */}
+        <EnhancedCharts />
+
         {/* AI-Powered Analytics */}
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
           {/* AI Insights */}
@@ -264,6 +269,9 @@ export default function AnalyticsPage() {
           {/* AI Recommendations */}
           <AIRecommendations />
         </div>
+
+        {/* Export Manager */}
+        <ExportManager />
       </div>
     </AppLayout>
   )
