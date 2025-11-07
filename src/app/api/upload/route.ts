@@ -1,14 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { verifyAuth } from '@/lib/auth'
+import { requireAuth } from '@/lib/auth'
 import { handleFileUpload } from '@/lib/upload'
 import { prisma } from '@/lib/prisma'
 
 export async function POST(request: NextRequest) {
   try {
-    const user = await verifyAuth(request)
-    if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
+    const user = await requireAuth(request)
 
     const { searchParams } = new URL(request.url)
     const type = searchParams.get('type') || 'attachment'
@@ -90,10 +87,7 @@ export async function POST(request: NextRequest) {
 // Get attachments
 export async function GET(request: NextRequest) {
   try {
-    const user = await verifyAuth(request)
-    if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
+    const user = await requireAuth(request)
 
     const { searchParams } = new URL(request.url)
     const taskId = searchParams.get('taskId')

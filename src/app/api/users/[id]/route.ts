@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { verifyToken } from '@/lib/auth'
+import { requireAuth } from '@/lib/auth'
 import { z } from 'zod'
 
 const updateUserSchema = z.object({
@@ -23,10 +23,7 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
-    const user = await verifyToken(request)
-    if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
+    const user = await requireAuth(request)
 
     const userId = params.id
 
@@ -194,10 +191,7 @@ export async function PUT(
   { params }: { params: { id: string } }
 ) {
   try {
-    const user = await verifyToken(request)
-    if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
+    const user = await requireAuth(request)
 
     const userId = params.id
 
@@ -289,10 +283,7 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
-    const user = await verifyToken(request)
-    if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
+    const user = await requireAuth(request)
 
     // Only admins can delete users
     if (user.role !== 'ADMIN') {

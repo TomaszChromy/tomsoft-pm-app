@@ -1,14 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { verifyToken } from '@/lib/auth'
+import { requireAuth } from '@/lib/auth'
 
 // GET /api/team/stats - Get team statistics
 export async function GET(request: NextRequest) {
   try {
-    const user = await verifyToken(request)
-    if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
+    const user = await requireAuth(request)
 
     // Only admins and project managers can view team stats
     if (!['ADMIN', 'PROJECT_MANAGER'].includes(user.role)) {
