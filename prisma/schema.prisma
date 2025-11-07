@@ -55,6 +55,9 @@ model User {
   organizedMeetings    Meeting[]             @relation("MeetingOrganizer")
   participantMeetings  Meeting[]             @relation("MeetingParticipants")
 
+  // Project templates
+  createdTemplates     ProjectTemplate[]
+
   // Performance indexes
   @@index([email])
   @@index([role])
@@ -732,4 +735,111 @@ model Meeting {
   @@index([organizerId])
   @@index([startTime])
   @@map("meetings")
+}
+
+model ProjectTemplate {
+  id              String   @id @default(cuid())
+  name            String
+  description     String?
+  category        String   // e.g., "Software Development", "Marketing", "Research"
+  tags            String[] // Array of tags for filtering
+  isPublic        Boolean  @default(false) // Public templates available to all users
+
+  // Template configuration
+  defaultDuration Int?     // Default project duration in days
+  estimatedHours  Float?   // Estimated total hours
+  complexity      String?  // LOW, MEDIUM, HIGH, EXPERT
+
+  // Template structure
+  phases          TemplatePhase[]
+  tasks           TemplateTask[]
+  milestones      TemplateMilestone[]
+
+  // Metadata
+  createdById     String
+  createdBy       User     @relation(fields: [createdById], references: [id])
+  usageCount      Int      @default(0) // Track how often template is used
+  rating          Float?   // Average user rating
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([category])
+  @@index([isPublic])
+  @@index([createdById])
+  @@map("project_templates")
+}
+
+model TemplatePhase {
+  id              String   @id @default(cuid())
+  name            String
+  description     String?
+  order           Int      // Phase order in template
+  estimatedDays   Int?     // Estimated duration for this phase
+
+  templateId      String
+  template        ProjectTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
+
+  tasks           TemplateTask[]
+  milestones      TemplateMilestone[]
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([templateId])
+  @@index([order])
+  @@map("template_phases")
+}
+
+model TemplateTask {
+  id              String   @id @default(cuid())
+  title           String
+  description     String?
+  priority        Priority @default(MEDIUM)
+  estimatedHours  Float?
+  storyPoints     Int?
+
+  // Task dependencies
+  dependsOn       String[] // Array of task IDs this task depends on
+
+  // Phase and template relations
+  templateId      String
+  template        ProjectTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
+
+  phaseId         String?
+  phase           TemplatePhase? @relation(fields: [phaseId], references: [id], onDelete: SetNull)
+
+  // Task configuration
+  isOptional      Boolean  @default(false)
+  autoAssign      Boolean  @default(false) // Auto-assign to project owner
+  requiresReview  Boolean  @default(false)
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([templateId])
+  @@index([phaseId])
+  @@map("template_tasks")
+}
+
+model TemplateMilestone {
+  id              String   @id @default(cuid())
+  title           String
+  description     String?
+  daysFromStart   Int      // Days from project start when milestone is due
+
+  templateId      String
+  template        ProjectTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
+
+  phaseId         String?
+  phase           TemplatePhase? @relation(fields: [phaseId], references: [id], onDelete: SetNull)
+
+  isRequired      Boolean  @default(true)
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([templateId])
+  @@index([phaseId])
+  @@map("template_milestones")
 }
